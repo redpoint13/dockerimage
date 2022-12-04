@@ -1,0 +1,23 @@
+name: ml-env
+channels:
+  - rapidsai
+  - nvidia
+  - conda-forge
+  - anaconda
+  # - bioconda
+dependencies:
+  - python=3.8
+  - pip
+  - pycaret
+  - pandas
+  - swifter
+  - numpy=1.22
+  - numba=0.56.4
+  - joblib
+  - dask=2022.6.1
+  - black
+  - ipykernel
+  - jupyterlab
+  - flask
+  # - pip:
+  #     - pycaret==3.0.0rc4
