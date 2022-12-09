@@ -19,6 +19,29 @@ EXPOSE 8686
 # MLFlow listening port:
 EXPOSE 5000
 
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+# https://code.visualstudio.com/remote/advancedcontainers/overview
+# ARG USERNAME=appuser
+# ARG USER_UID=1000
+# ARG USER_GID=$USER_UID
+
+# # Create the user
+# RUN groupadd --gid $USER_GID $USERNAME \
+#     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+#     #
+#     # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
+#     && apt-get update \
+#     && apt-get install -y sudo \
+#     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+#     && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# ********************************************************
+# * Anything else you want to do like clean up goes here *
+# ********************************************************
+# [Optional] Set the default user. Omit if you want to keep the default as root.
+# USER $USERNAME
+
 # install basic apps, one per line for better caching
 RUN apt-get update && apt-get install -qy apt-utils
 RUN apt-get update && apt-get install -qy locales && \
@@ -53,56 +76,28 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}
 
 RUN /opt/conda/bin/conda update -y -n base conda
 RUN /opt/conda/bin/conda install -y -n base -c conda-forge mamba
-RUN /opt/conda/bin/conda update --all -y
+RUN /opt/conda/bin/mamba update --all -y
 
-# RUN mamba install -y -c "nvidia/label/cuda-11.8.0" cuda-toolkit
-# RUN mamba install -y -c conda-forge jupyterlab
-# RUN mamba install -y -c conda-forge jupyter_nbextensions_configurator
-# RUN mamba install -y -c conda-forge jupyter_contrib_nbextensions
+# RUN /opt/conda/bin/mamba install -y -n base -c anaconda cudatoolkit
+RUN /opt/conda/bin/mamba install -y -n base -c conda-forge jupyterlab nb_conda_kernels tensorboard jupytext jupyter_nbextensions_configurator jupyter_contrib_nbextensions
 
 WORKDIR /app
 COPY . /app
 
 # Create Conda environment from the YAML file
-# RUN /opt/conda/bin/conda env create -f environment.yml
-# ENV CONDA_DEFAULT_ENV=ml-env
-# RUN /opt/conda/bin/conda init bash && echo '/opt/conda/bin/conda activate "${CONDA_TARGET_ENV:-base}"' >>  ~/.bashrc
+RUN /opt/conda/bin/mamba env create -f environment.yml
+ENV CONDA_DEFAULT_ENV=ml-env
+RUN /opt/conda/bin/mamba init bash && echo '/opt/conda/bin/mamba activate "${CONDA_DEFAULT_ENV:-base}"' >>  ~/.bashrc
 
 # RUN python -m ipykernel install --user --name ml-env --display-name ml-env
 
 # Override default shell and use bash
 # SHELL ["/opt/conda/bin/conda", "run", "-n", "ml-env", "/bin/bash", "-c"]
 
-# install the specified version of pycaret
-# RUN pip install -U --pre pycaret[full]==3.0.0rc4
-
 # Activate Conda environment and check if it is working properly
 # RUN echo "Making sure pycaret is installed correctly..."
 # RUN python -c "import pycaret"
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
-# https://code.visualstudio.com/remote/advancedcontainers/overview
-# ARG USERNAME=appuser
-# ARG USER_UID=1000
-# ARG USER_GID=$USER_UID
-
-# # Create the user
-# RUN groupadd --gid $USER_GID $USERNAME \
-#     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-#     #
-#     # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
-#     && apt-get update \
-#     && apt-get install -y sudo \
-#     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-#     && chmod 0440 /etc/sudoers.d/$USERNAME
-
-# ********************************************************
-# * Anything else you want to do like clean up goes here *
-# ********************************************************
-# [Optional] Set the default user. Omit if you want to keep the default as root.
-# USER $USERNAME
-
 # Python program to run in the container
 COPY app.py .
-# ENTRYPOINT ["mamba", "run", "-n", "ml-env", "python", "app.py"]
+CMD ["/bin/bash"]
