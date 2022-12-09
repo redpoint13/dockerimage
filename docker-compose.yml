@@ -2,7 +2,15 @@ version: '3.4'
 
 services:
   dockerimage:
-    image: dockerimage
+    image: dockerimage:setup
     build:
       context: .
       dockerfile: ./Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+              - gpu
+    ports:
+      - 8888:8888
