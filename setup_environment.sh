@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env -l
 
 # fix jupyter server to run properly
 # mamba remove --force notebook -y
@@ -6,7 +6,7 @@
 # mamba remove --force jupyter_contrib_nbextensions -y
 # mamba install jupyter notebook -y
 
-mamba install -c "nvidia/label/cuda-11.8.0" cuda-toolkit -y
+mamba install -c anaconda cudatoolkit -y
 mamba install -c conda-forge jupytext -y
 mamba install -c conda-forge jupyterlab jupyter_nbextensions_configurator jupyter_contrib_nbextensions -y
 pip install jupyter-tensorboard
@@ -20,10 +20,9 @@ ENV CONDA_TARGET_ENV=ml-env
 # Name the enviornment to add to pick list in jupyter
 python -m ipykernel install --user --name ml-env --display-name ml-env
 
-# Override default shell and use bash
-SHELL ["/bin/bash", "--login", "-c"]
-
-# /opt/conda/bin/mamba -n ml-env
+echo "before calling source: $PATH"
+conda activate ml-env
+echo "after calling source: $PATH"
 
 # install the specified version of pycaret
 pip install -U --pre pycaret[full]==3.0.0rc4
