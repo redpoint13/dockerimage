@@ -89,7 +89,7 @@ RUN /opt/conda/bin/mamba env create -f environment.yml
 ENV CONDA_DEFAULT_ENV=ml-env
 RUN /opt/conda/bin/mamba init bash && echo '/opt/conda/bin/mamba activate "${CONDA_DEFAULT_ENV:-base}"' >>  ~/.bashrc
 
-# RUN python -m ipykernel install --user --name ml-env --display-name ml-env
+RUN python -m ipykernel install --user --name ml-env --display-name ml-env
 
 # Override default shell and use bash
 # SHELL ["/opt/conda/bin/conda", "run", "-n", "ml-env", "/bin/bash", "-c"]
