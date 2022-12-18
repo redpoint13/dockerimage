@@ -11,6 +11,9 @@ dependencies:
   - cudatoolkit
   - pandas
   - cuml
+  - dask-cudf
+  - xgboost
+  - catboost
   - swifter
   - numpy=1.22
   - numba=0.56.4
@@ -19,10 +22,15 @@ dependencies:
   - black
   - flask
   - nb_conda_kernels
-  # added after last build -> not tested
   - mlflow
   - scikit-learn=1.1.3
   - scipy=1.8.1 
   - pynvml
+  - jupyterlab_widgets
+  # added after last build -> not tested
+  # - scikit-learn-intelex  # has issue caused by daal
+  - sktime>=0.14.0
   - pip:
-      - pycaret==3.0.0rc4
+      - setuptools
+      # - pycaret[full]==3.0.0rc5
+      - git+https://github.com/pycaret/pycaret.git@master
