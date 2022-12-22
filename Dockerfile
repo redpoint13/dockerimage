@@ -46,6 +46,7 @@ libsm6 \
 libxrender1 \
 git \
 vim \
+nano \
 mercurial \
 subversion \
 cmake \
@@ -74,7 +75,7 @@ RUN echo "export PATH=$CONDA_DIR/bin:"'$PATH' > /etc/profile.d/conda.sh && \
     rm ~/miniforge.sh
 
 RUN conda config --set always_yes yes --set changeps1 no && \
-    conda create -y -q -n py3 numpy scipy scikit-learn jupyter jupyter-lab notebook ipython pandas matplotlib
+    conda create -y -q -n py3 numpy scipy scikit-learn jupyter jupyterlab notebook ipython pandas matplotlib
 
 #################################################################################################################
 #           LightGBM
