@@ -27,6 +27,8 @@ dependencies:
   - scipy=1.8.1 
   - pynvml
   - jupyterlab_widgets
+  - rmm
+  - fugue
   # added after last build -> not tested
   # - scikit-learn-intelex  # has issue caused by daal
   - sktime>=0.14.0
