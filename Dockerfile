@@ -1,4 +1,5 @@
-FROM nvidia/cuda:8.0-cudnn5-devel
+# FROM nvidia/cuda:8.0-cudnn5-devel
+FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 
 #################################################################################################################
 #           Global
@@ -128,7 +129,7 @@ RUN /opt/conda/bin/conda update -qy -n base conda
 RUN /opt/conda/bin/conda install -qy -n base -c conda-forge mamba
 RUN /opt/conda/bin/mamba update --all -y
 
-# RUN /opt/conda/bin/mamba install -y -n base -c conda-forge jupyterlab nb_conda_kernels ipykernel tensorboard jupytext jupyter_nbextensions_configurator jupyter_contrib_nbextensions
+RUN /opt/conda/bin/mamba install -y -n base -c conda-forge jupyterlab nb_conda_kernels ipykernel tensorboard jupytext jupyter_nbextensions_configurator jupyter_contrib_nbextensions
 
 WORKDIR /app
 COPY . /app
@@ -140,6 +141,8 @@ RUN /opt/conda/bin/mamba env create -f environment.yml
 ENV CONDA_DEFAULT_ENV=ml-env
 ARG conda_env=ml-env
 RUN /opt/conda/bin/mamba init bash && echo '/opt/conda/bin/mamba activate "${CONDA_DEFAULT_ENV:-base}"' >>  ~/.bashrc
+
+RUN python -m ipykernel install --user --name ml-env --display-name ml-env
 
 # prepend conda environment to path
 ENV CONDA_DIR="/opt/conda/bin"
@@ -161,4 +164,4 @@ COPY . /app
 # Python program to run in the container
 COPY app.py .
 ENTRYPOINT [ "/tini", "--" ]
-CMD /bin/bash -c "source activate py3 && jupyter notebook --allow-root --no-browser --NotebookApp.password='sha1:98b767162d34:8da1bc3c75a0f29145769edc977375a373407824' && source deactivate"
+CMD /bin/bash -c "mamba activate py3 && jupyter-lab --allow-root --no-browser && mamba deactivate"
