@@ -165,12 +165,15 @@ RUN apt-get autoremove -y && apt-get clean && \
 RUN mkdir -p -m 700 ~/.jupyter/ && \
     echo "--ServerApp.ip=0.0.0.0 --ServerApp.port=8888 --no-browser --notebook-dir="/app/" --ServerApp.token='abcdefg1234567890' --ServerApp.password='abcdefg1234567890'"  >> ~/.jupyter/jupyter_notebook_config.py
 
+# RUN python -m ipykernel install --user --name ml-env --display-name ml-env
+
 # IPython/Jupyter listens ports:
 EXPOSE 8888
 EXPOSE 8787
 EXPOSE 8686
 # MLFlow listening port:
 EXPOSE 5000
+
 
 # Make RUN commands use the new environment:
 SHELL ["/opt/conda/bin/mamba", "run", "-n", "ml-env", "/bin/bash", "-c"]
