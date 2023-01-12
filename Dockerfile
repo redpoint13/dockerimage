@@ -82,7 +82,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}
     echo "${CONDA_MD5}  miniconda.sh" > miniconda.md5 && \
     if ! sha256sum --status -c miniconda.md5; then exit 1; fi && \
     mkdir -p /opt && \
-    sh miniconda.sh -b -p /opt/conda && \
+    bash miniconda.sh -b -p /opt/conda && \
     rm miniconda.sh miniconda.md5 && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> /root/.bashrc && \
@@ -124,7 +124,7 @@ ARG CONDA_DEFAULT_ENV=ml-env
 
 RUN /opt/conda/bin/mamba env create -f environment.yml \
     # Make RUN commands use the new environment:
-    && echo -e '#! /bin/bash\n\n/opt/conda/bin/conda activate "${CONDA_DEFAULT_ENV:-base}"' > ~/.bashrc \
+    && echo -e '#! /bin/bash\n\n/opt/conda/bin/conda activate "${CONDA_DEFAULT_ENV:-base}"' > ~/.bashrc
     # && conda remove -n ml-env cudf -y \
     # && mamba install -n ml-env -c rapidsai cudf \
 
@@ -183,8 +183,11 @@ RUN echo "Making sure pycaret is installed correctly..."
 RUN python -c "import pycaret" && \
     python -c "import lightgbm"
 
+WORKDIR /app
+COPY *.sh /app
 # Python program to run in the container
 # COPY app.py .
-ENTRYPOINT [ "/bin/bash", "start-jupyter.sh" ]
+# ENTRYPOINT [ "/bin/bash", "start-jupyter.sh" ]
 # CMD /bin/bash -c "source activate base && jupyter notebook --allow-root --no-browser --NotebookApp.password='sha1:98b767162d34:8da1bc3c75a0f29145769edc977375a373407824' && source deactivate"
 # CMD ["/bin/bash", "/root/.bashrc"]
+ENTRYPOINT ["/bin/bash"]
