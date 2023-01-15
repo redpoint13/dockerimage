@@ -120,7 +120,7 @@ RUN conda config --set always_yes yes && \
 #           create ml-env
 #################################################################################################################
 ENV CONDA_DEFAULT_ENV=ml-env
-ARG CONDA_DEFAULT_ENV=ml-env
+ARG CONDA_DEFAULT_ENV "ml-env"
 
 RUN /opt/conda/bin/mamba env create -f environment.yml \
     # Make RUN commands use the new environment:
