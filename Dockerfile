@@ -126,7 +126,7 @@ RUN /opt/conda/bin/mamba env create -f environment.yml \
     # Make RUN commands use the new environment:
     && echo -e '#! /bin/bash\n\n/opt/conda/bin/conda activate "${CONDA_DEFAULT_ENV:-base}"' > ~/.bashrc
     # && conda remove -n ml-env cudf -y \
-    # && mamba install -n ml-env -c rapidsai cudf \
+    # && mamba install -n ml-env -c rapidsai cudf
 
 #################################################################################################################
 #           LightGBM
@@ -139,6 +139,8 @@ RUN cd /usr/local/src && mkdir lightgbm && cd lightgbm && \
     make OPENCL_HEADERS=/usr/local/cuda-8.0/targets/x86_64-linux/include LIBOPENCL=/usr/local/cuda-8.0/targets/x86_64-linux/lib
 
 ENV PATH /usr/local/src/lightgbm/LightGBM:${PATH}
+
+RUN /bin/bash -c "pip uninstall lightgbm"  # remove old installation that have no GPU support
 
 # RUN /bin/bash -c "/opt/conda/bin/mamba activate ml-env && cd /usr/local/src/lightgbm/LightGBM/python-package && python setup.py install --precompile --cuda && /opt/conda/bin/mamba deactivate"
 RUN /bin/bash -c "cd /usr/local/src/lightgbm/LightGBM/python-package && python setup.py install --precompile --cuda"
