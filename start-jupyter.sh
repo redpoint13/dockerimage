@@ -8,4 +8,6 @@ nohup jupyter-lab --allow-root --ServerApp.ip=0.0.0.0 --ServerApp.port=8888 --no
 echo "JupyterLab server started."
 
 # Forward initial parameters
-/bin/bash "${allparams[@]}"
+# /bin/bash "${allparams[@]}"
+
+# /bin/bash /root/.bashrc
