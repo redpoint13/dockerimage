@@ -82,8 +82,11 @@ RUN /opt/conda/bin/conda config --set always_yes yes && \
 #################################################################################################################
 ENV CONDA_DEFAULT_ENV=mlx
 ARG CONDA_DEFAULT_ENV=mlx
+
+RUN conda create -n ucx -c conda-forge -c rapidsai cudatoolkit=11.2 ucx-proc=*=gpu ucx ucx-py python=3.9
 COPY environment.yml /app/environment.yml
-RUN /opt/conda/bin/mamba env create -f /app/environment.yml \
+# RUN /opt/conda/bin/mamba env create -f /app/environment.yml \
+RUN /opt/conda/bin/mamba env update -n mlx -f /app/environment.yml --prune \
     # Make RUN commands use the new environment:
     && echo -e '#! /bin/bash\n\n/opt/conda/bin/conda activate "${CONDA_DEFAULT_ENV:-base}"' > ~/.bashrc
 RUN python -m ipykernel install --user --name mlx --display-name env-mlx
@@ -133,6 +136,8 @@ RUN apt-get autoremove -y && apt-get clean && \
 EXPOSE 8888
 EXPOSE 8787
 EXPOSE 8686
+# for UCX
+EXPOSE 8786
 # MLFlow listening port:
 EXPOSE 5000
 
