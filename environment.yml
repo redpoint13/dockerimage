@@ -1,0 +1,43 @@
+name: mlx
+channels:
+  - conda-forge
+  - rapidsai
+  - nvidia
+  - anaconda
+  - bioconda
+dependencies:
+  - python=3.9
+  - black
+  - catboost
+  - cudatoolkit==11.2
+  - cuml=22.12
+  # - cudf=22.12
+  # - dask
+  # - dask-cuda==22.12
+  # - dask-cudf==22.12
+  # - flask
+  # - fugue
+  - joblib
+  # - mlflow
+  # - numba=0.56.4
+  - numba
+  # - numpy
+  - pandas
+  - pip
+  - pynvml
+  # - rmm
+  - scikit-learn
+  # - scipy
+  # - python_abi
+  - swifter
+  - xgboost
+  - ipykernel
+  - jupyterlab_widgets
+  - nb_conda_kernels
+  # - sktime>=0.14.0
+  # added after last build -> not tested
+  - pip:
+      - setuptools
+      - git+https://github.com/pycaret/pycaret.git@master
+      - scikit-learn-intelex  # has issue caused by daal
+      - daal
