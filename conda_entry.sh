@@ -24,20 +24,19 @@
 ## The conda shell hook placed in `.bashrc` will reset our
 ## env to "base" on shell-ing into the container. If you want to start in a custom end,
 
-conda init bash
-
+# conda init bash
 # $SHELL
 
-CONDA_DEFAULT_ENV=mlx
-## cache the value because the shell hook step will remove it
-_CONDA_DEFAULT_ENV="${CONDA_DEFAULT_ENV:-base}"
+# CONDA_DEFAULT_ENV=mlx
+# ## cache the value because the shell hook step will remove it
+# _CONDA_DEFAULT_ENV="${CONDA_DEFAULT_ENV:-base}"
 
-__conda_setup="$('/opt/conda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-eval "$__conda_setup"
-unset __conda_setup
+# # __conda_setup="$('/opt/conda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# # eval "$__conda_setup"
+# unset __conda_setup
 
-## Restore our "indended" default env
-conda activate "${_CONDA_DEFAULT_ENV}"
+# ## Restore our "indended" default env
+# conda activate "${_CONDA_DEFAULT_ENV}"
 ## This just logs the output to stderr for debugging.
 # >&2 echo "ENTRYPOINT: CONDA_DEFAULT_ENV=${CONDA_DEFAULT_ENV}"
 
